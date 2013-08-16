@@ -10,7 +10,6 @@
 namespace RzekaE\Akismet;
 
 use \InvalidArgumentException;
-use Rzeka\Version\Version;
 use RzekaE\Akismet\Connector;
 
 class Akismet
@@ -19,6 +18,11 @@ class Akismet
      * Akismet library version
      */
     const LIB_VERSION = '1.0.0';
+    
+    /**
+     * Application name and version
+     */
+    const LIB_VERSION = 'rzeka.net/1.0.0';
 
     /**
      * Option to use fsockopen
@@ -56,7 +60,7 @@ class Akismet
         } else {
             $this->connection = new Connector\PHP();
         }
-        $this->connection->setUserAgent(sprintf('%s/%s | Akismet/%s', Version::FRAMEWORK_NAME, Version::FRAMEWORK_VERSION, self::LIB_VERSION));
+        $this->connection->setUserAgent(sprintf('%s/%s | Akismet/%s', self::APP_VERSION, self::LIB_VERSION));
 
         $this->connection->keyCheck($apiKey,$url);
     }
