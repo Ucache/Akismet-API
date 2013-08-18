@@ -60,7 +60,7 @@ class Akismet
         } else {
             $this->connection = new Connector\PHP();
         }
-        $this->connection->setUserAgent(sprintf('%s/%s | Akismet/%s', self::APP_VERSION, self::LIB_VERSION));
+        $this->connection->setUserAgent(sprintf('%s | Akismet/%s', self::APP_VERSION, self::LIB_VERSION));
 
         $this->connection->keyCheck($apiKey,$url);
     }
