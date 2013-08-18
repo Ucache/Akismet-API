@@ -22,7 +22,7 @@ class Akismet
     /**
      * Application name and version
      */
-    const LIB_VERSION = 'rzeka.net/1.0.0';
+    const APP_VERSION = 'rzeka.net/1.0.0';
 
     /**
      * Option to use fsockopen
