@@ -71,7 +71,7 @@ interface ConnectorInterface
      * Marks message as spam
      *
      * @param array $comment Message data. Required keys:<br />
-     *      premalink - the permanent location of the entry the comment was submitted to<br />
+     *      permalink - the permanent location of the entry the comment was submitted to<br />
      *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
      *      comment_author - name submitted with the comment<br />
      *      comment_author_email - email address submitted with the comment<br />
@@ -85,7 +85,7 @@ interface ConnectorInterface
      * Marks message as ham (not-spam)
      *
      * @param array $comment Message data. Required keys:<br />
-     *      premalink - the permanent location of the entry the comment was submitted to<br />
+     *      permalink - the permanent location of the entry the comment was submitted to<br />
      *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
      *      comment_author - name submitted with the comment<br />
      *      comment_author_email - email address submitted with the comment<br />
@@ -99,7 +99,7 @@ interface ConnectorInterface
      * Check if message is spam or not
      *
      * @param array $comment Message data. Required keys:<br />
-     *      premalink - the permanent location of the entry the comment was submitted to<br />
+     *      permalink - the permanent location of the entry the comment was submitted to<br />
      *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
      *      comment_author - name submitted with the comment<br />
      *      comment_author_email - email address submitted with the comment<br />

@@ -89,7 +89,7 @@ class Curl implements ConnectorInterface
      * Marks message as ham (not-spam)
      *
      * @param array $comment Message data. Required keys:<br />
-     *      premalink - the permanent location of the entry the comment was submitted to<br />
+     *      permalink - the permanent location of the entry the comment was submitted to<br />
      *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
      *      comment_author - name submitted with the comment<br />
      *      comment_author_email - email address submitted with the comment<br />
@@ -106,7 +106,7 @@ class Curl implements ConnectorInterface
      * Marks message as spam
      *
      * @param array $comment Message data. Required keys:<br />
-     *      premalink - the permanent location of the entry the comment was submitted to<br />
+     *      permalink - the permanent location of the entry the comment was submitted to<br />
      *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
      *      comment_author - name submitted with the comment<br />
      *      comment_author_email - email address submitted with the comment<br />
@@ -123,7 +123,7 @@ class Curl implements ConnectorInterface
      * Check if message is spam or not
      *
      * @param array $comment Message data. Required keys:<br />
-     *      premalink - the permanent location of the entry the comment was submitted to<br />
+     *      permalink - the permanent location of the entry the comment was submitted to<br />
      *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
      *      comment_author - name submitted with the comment<br />
      *      comment_author_email - email address submitted with the comment<br />
@@ -140,7 +140,7 @@ class Curl implements ConnectorInterface
      * Makes query to Akismet API and checks the response
      *
      * @param array $comment Message data. Required keys:<br />
-     *      premalink - the permanent location of the entry the comment was submitted to<br />
+     *      permalink - the permanent location of the entry the comment was submitted to<br />
      *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
      *      comment_author - name submitted with the comment<br />
      *      comment_author_email - email address submitted with the comment<br />
@@ -158,9 +158,17 @@ class Curl implements ConnectorInterface
 
         if ($path !== self::PATH_KEY) {
             $comment['blog'] = $this->url;
-            $comment['user_ip'] = $_SERVER['REMOTE_ADDR'];
-            $comment['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-            $comment['referrer'] = $_SERVER['HTTP_REFERER'];
+            if (!array_key_exists('user_ip', $comment)) { //set the user ip if not sent
+                $comment['user_ip'] = $_SERVER['REMOTE_ADDR'];
+            }
+
+            if (!array_key_exists('user_agent', $comment)) { //set the ua string if not sent
+                $comment['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+            }
+
+            if (!array_key_exists('referrer', $comment)) { //set the referer if not set
+                $comment['referrer'] = $_SERVER['HTTP_REFERER'];
+            }
         }
 
         $settings = array(
