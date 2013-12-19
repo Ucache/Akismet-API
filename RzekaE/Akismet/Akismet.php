@@ -10,6 +10,7 @@
 namespace RzekaE\Akismet;
 
 use \InvalidArgumentException;
+use \Exception;
 use RzekaE\Akismet\Connector;
 
 class Akismet
@@ -62,7 +63,9 @@ class Akismet
         }
         $this->connection->setUserAgent(sprintf('%s | Akismet/%s', self::APP_VERSION, self::LIB_VERSION));
 
-        $this->connection->keyCheck($apiKey,$url);
+        if ($this->connection->keyCheck($apiKey, $url) == false) {
+            throw new Exception('Api key is invalid');
+        };
     }
 
     /**
