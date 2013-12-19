@@ -8,7 +8,8 @@ Usage
 
 Initalizing class
 
-    $akismet = new Akismet('api key', 'blog url', Akismet::USE_CURL);
+    $connector = new RzekaE\Akismet\Connector\Curl();
+    $akismet = new Akismet('api key', 'blog url', $connector);
 
 During initalization, class connects to Akismet and verified API key. You have to check `$akismet->getError()` to see if there are any errors
 
