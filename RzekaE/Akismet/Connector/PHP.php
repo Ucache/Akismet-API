@@ -54,6 +54,15 @@ class PHP implements ConnectorInterface
     private $error;
 
     /**
+     * Constructor checks if cURL extension exists and sets API url
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $this->apiUrl = sprintf('http://%s/%s/', self::AKISMET_URL, self::AKISMET_API_VERSION);
+    }
+
+    /**
      * Checks if Akismet API key is valid
      *
      * @param string $apiKey Akismet API key
@@ -62,9 +71,6 @@ class PHP implements ConnectorInterface
      */
     public function keyCheck($apiKey, $url)
     {
-        $this->apiHost = self::AKISMET_URL;
-        $this->apiUrl = sprintf('/%s/', self::AKISMET_API_VERSION);
-
         $check = $this->query(array(
             'key' => $apiKey,
             'blog' => $url

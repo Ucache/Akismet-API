@@ -18,7 +18,7 @@ class Akismet
      * Akismet library version
      */
     const LIB_VERSION = '1.0.0';
-    
+
     /**
      * Application name and version
      */
@@ -49,16 +49,16 @@ class Akismet
      * @param int $connection self::USE_*
      * @throws InvalidArgumentException
      */
-    public function __construct($apiKey = null, $url = null, $connection = self::USE_CURL)
+    public function __construct($apiKey = null, $url = null, Connector\ConnectorInterface $connection = null)
     {
         if ($apiKey === null || $url === null) {
             throw new InvalidArgumentException('Both apiKey and site URL cannot be null');
         }
 
-        if ($connection === self::USE_CURL) {
+        if ($connection === null) {
             $this->connection = new Connector\Curl();
         } else {
-            $this->connection = new Connector\PHP();
+            $this->connection = $connection;
         }
         $this->connection->setUserAgent(sprintf('%s | Akismet/%s', self::APP_VERSION, self::LIB_VERSION));
 
