@@ -18,7 +18,7 @@ class Akismet
     /**
      * Akismet library version
      */
-    const LIB_VERSION = '1.0.0';
+    const LIB_VERSION = '1.0.1';
 
     /**
      * Application name and version
