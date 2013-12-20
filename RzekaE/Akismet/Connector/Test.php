@@ -1,23 +1,13 @@
 <?php
-/**
- * rzeka.net framework (http://framework.rzeka.net/)
- *
- * @link http://framework.rzeka.net/
- * @copyright (c) 2013, rzeka.net
- * @license http://framework.rzeka.net/license New BSD License
- */
-
 namespace RzekaE\Akismet\Connector;
 
-class PHP implements ConnectorInterface
-{
-    /**
-     * Holds API host
-     *
-     * @var string
-     */
-    private $apiHost;
+use \Exception;
 
+/**
+ * Test connector that just mocks out api calls
+ */
+class Test implements ConnectorInterface
+{
     /**
      * Holds API key
      *
@@ -54,6 +44,13 @@ class PHP implements ConnectorInterface
     private $error;
 
     /**
+     * Comment author that should always be flagged as spam
+     *
+     * @var string
+     */
+    private $spamAuthor = "viagra-test-123";
+
+    /**
      * Constructor checks if cURL extension exists and sets API url
      * @throws Exception
      */
@@ -79,8 +76,7 @@ class PHP implements ConnectorInterface
         if ($check === true) {
             $this->apiKey = $apiKey;
             $this->url = $url;
-            $this->apiUrl = sprintf('/%s/', self::AKISMET_API_VERSION);
-            $this->apiHost = sprintf('%s.%s', $this->apiKey, self::AKISMET_URL);
+            $this->apiUrl = sprintf('http://%s.%s/%s/', $this->apiKey, self::AKISMET_URL, self::AKISMET_API_VERSION);
             return true;
         } else {
             return false;
@@ -97,7 +93,7 @@ class PHP implements ConnectorInterface
      *      comment_author_email - email address submitted with the comment<br />
      *      comment_author_url - URL submitted with comment<br />
      *      comment_content - the content that was submitted
-     * @return boolean True if messahe has been marked as ham
+     * @return boolean True if message has been marked as ham
      */
     public function sendHam(array $comment)
     {
@@ -135,7 +131,13 @@ class PHP implements ConnectorInterface
      */
     public function check(array $comment)
     {
-        return $this->query($comment, self::PATH_CHECK, self::RETURN_TRUE);
+        // If spam on purpose return true
+        if ($comment['comment_author'] == $this->spamAuthor) {
+            return true;
+        }
+
+        // Otherwise it is never spam
+        return false;
     }
 
     /**
@@ -156,70 +158,8 @@ class PHP implements ConnectorInterface
     {
         $this->error = null;
 
-        if ($path !== self::PATH_KEY) {
-            $comment['blog'] = $this->url;
-            if (!array_key_exists('user_ip', $comment)) { //set the user ip if not sent
-                $comment['user_ip'] = $_SERVER['REMOTE_ADDR'];
-            }
-
-            if (!array_key_exists('user_agent', $comment)) { //set the ua string if not sent
-                $comment['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-            }
-
-            if (!array_key_exists('referrer', $comment)) { //set the referer if not set
-                $comment['referrer'] = $_SERVER['HTTP_REFERER'];
-            }
-        }
-
-        $request = http_build_query($comment);
-        $requestLength = strlen($request);
-
-        $headers = array(
-            sprintf('POST %s HTTP/1.0', $this->apiHost),
-            sprintf('Host: %s%s', $this->apiUrl, $path),
-            'Content-Type: application/x-www-form-urlencoded',
-            sprintf('Content-Length: %s', $requestLength),
-            sprintf('User-Agent: %s', $this->userAgent),
-            '', //we need an empty line in here
-            $request
-        );
-
-        $headersWrite = implode("\r\n", $headers);
-
-        $conn = fsockopen($this->apiHost, 80, $errno, $errstr, 10);
-
-        if ($conn === false) {
-            $this->error = sprintf('Socket error %s: %s', $errno, $errstr);
-            return false;
-        } else {
-            $response = '';
-            fwrite($conn, $headersWrite);
-
-            while (!feof($conn)) {
-                $response .= fgets($conn, 1160);
-            }
-
-            fclose($conn);
-        }
-
-        if (strlen($response) > 0) {
-            $response = explode("\r\n\r\n", $response, 2);
-            if (trim(end($response)) == $expect) {
-                return true;
-            } else {
-                $debug = explode("\n", $response[0]);
-                foreach ($debug as $header) {
-                    if (stripos($header, 'X-akismet-debug-help') === 0) {
-                        $this->error = trim($header);
-                    }
-                }
-                return false;
-            }
-
-        } else {
-            $this->error = 'Unknown error';
-            return false;
-        }
+        // Always return true
+        return true;
     }
 
     /**
