@@ -1,0 +1,17 @@
+{
+    "name": "rzeka/akismet-api",
+    "description": "Small library to access Akismet API",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Piotr Rzeczkowski"
+        },
+        {
+            "name": "Jonathan Kim",
+            "email": "jkimbo@gmail.com"
+        }
+    ],
+    "require": {
+
+    }
+}
