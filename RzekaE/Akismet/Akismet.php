@@ -10,7 +10,6 @@
 namespace RzekaE\Akismet;
 
 use \InvalidArgumentException;
-use \Exception;
 use RzekaE\Akismet\Connector;
 
 class Akismet
@@ -26,16 +25,6 @@ class Akismet
     const APP_VERSION = 'rzeka.net/1.0.0';
 
     /**
-     * Option to use fsockopen
-     */
-    const USE_PHP = 1;
-
-    /**
-     * Option to use cURL
-     */
-    const USE_CURL = 2;
-
-    /**
      * Holds connector interface
      *
      * @var \RzekaE\Akismet\Connector\ConnectorInterface
@@ -43,29 +32,36 @@ class Akismet
     private $connection = null;
 
     /**
-     * Class constructor checks if Akismet API key is valid
+     * Class constructor sets up connector
      *
-     * @param string $apiKey Akismet API key
-     * @param string $url The front page or home URL of the instance making the request
-     * @param int $connection self::USE_*
-     * @throws InvalidArgumentException
+     * @param RzekaE\Akismet\Connector\ConnectorInterface $connection Connection instance
      */
-    public function __construct($apiKey = null, $url = null, Connector\ConnectorInterface $connection = null)
+    public function __construct(Connector\ConnectorInterface $connection = null)
     {
-        if ($apiKey === null || $url === null) {
-            throw new InvalidArgumentException('Both apiKey and site URL cannot be null');
-        }
-
         if ($connection === null) {
             $this->connection = new Connector\Curl();
         } else {
             $this->connection = $connection;
         }
-        $this->connection->setUserAgent(sprintf('%s | Akismet/%s', self::APP_VERSION, self::LIB_VERSION));
 
-        if ($this->connection->keyCheck($apiKey, $url) == false) {
-            throw new Exception('Api key is invalid');
-        };
+        $this->connection->setUserAgent(sprintf('%s | Akismet/%s', self::APP_VERSION, self::LIB_VERSION));
+    }
+
+    /**
+     * Allows to manually check if API key is valid or not
+     *
+     * @param string $apiKey Akismet API key
+     * @param string $url The front page or home URL of the instance making the request
+     * @throws InvalidArgumentException
+     * @return boolean
+     */
+    public function keyCheck($apiKey = null, $url = null)
+    {
+        if ($apiKey === null || $url === null) {
+            throw new InvalidArgumentException('Both apiKey and site URL cannot be null');
+        }
+
+        return $this->connection->keyCheck($apiKey, $url);
     }
 
     /**
