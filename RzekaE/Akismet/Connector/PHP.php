@@ -59,7 +59,8 @@ class PHP implements ConnectorInterface
      */
     public function __construct()
     {
-        $this->apiUrl = sprintf('http://%s/%s/', self::AKISMET_URL, self::AKISMET_API_VERSION);
+        $this->apiHost = self::AKISMET_URL;
+        $this->apiUrl = sprintf('/%s/', self::AKISMET_API_VERSION);
     }
 
     /**
