@@ -16,8 +16,8 @@
 
     },
     "autoload": {
-        "psr-0": {
-            "RzekaE\\Akismet": ""
+        "psr-4": {
+            "Rzeka\\Service\\": "Rzeka/Service"
         }
     }
 }

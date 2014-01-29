@@ -8,8 +8,8 @@ Usage
 
 Initalizing class
 
-    $connector = new RzekaE\Akismet\Connector\Curl();
-    $akismet = new Akismet($connector);
+    $connector = new Rzeka\Service\Akismet\Connector\Curl();
+    $akismet = new Rzeka\Service\Akismet($connector);
 
 During initalization, class doesn't verify API key any more. You have to use `$akismet->keyCheck()` to know if it's valid or not. You have to check `$akismet->getError()` to see if there are any errors
 
