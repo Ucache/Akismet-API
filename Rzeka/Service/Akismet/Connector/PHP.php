@@ -198,14 +198,15 @@ class PHP implements ConnectorInterface
         $requestLength = strlen($request);
 
         $headers = array(
-            sprintf('POST %s HTTP/1.0', $this->apiHost),
-            sprintf('Host: %s%s', $this->apiUrl, $path),
+            sprintf('POST %s%s HTTP/1.0', $this->apiUrl, $path),
+            sprintf('Host: %s', $this->apiHost),
             'Content-Type: application/x-www-form-urlencoded',
             sprintf('Content-Length: %s', $requestLength),
             sprintf('User-Agent: %s', $this->userAgent),
             '', //we need an empty line in here
             $request
         );
+
 
         $headersWrite = implode("\r\n", $headers);
 
